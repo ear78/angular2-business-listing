@@ -3,4 +3,10 @@
   <h1>
     Welcome to {{title}}!!
   </h1>
-  
+
+<!-- database TESTING -->
+  <ul>
+  <li class="text" *ngFor="let item of items | async">
+    {{item.address}}
+  </li>
+</ul>
