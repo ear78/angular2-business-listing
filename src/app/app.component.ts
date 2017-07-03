@@ -12,6 +12,9 @@ import { Business } from './business';
 export class AppComponent {
   title = 'app';
   businesses: Business[];
+  appState: string;
+  activeKey: string;
+
   // firebase varibales and connection
   constructor(private firebaseService: FirebaseService) {
 
@@ -20,4 +23,38 @@ export class AppComponent {
   ngOnInit(){
       this.firebaseService.getBusinesses().subscribe(businesses => {this.businesses = businesses});
   }
+
+  changeState(state, key){
+      console.log('changing state to: ' +state)
+      if(key){
+          console.log('changing state to: ' +state+ '-key' + key);
+          this.activeKey = key;
+      }
+      this.appState = state;
+  }
+
+  filterCategory(category){
+      this.firebaseService.getBusinesses(category)
+  }
+
+  addBusiness(event, business_name: string,
+  address: string,
+  email: string,
+  phone: string,
+  category: string){
+      let created_at = new Date().toString();
+      let newBusiness = {
+          business_name: business_name,
+          address: address,
+          email: email,
+          phone: phone,
+          category: category
+      }
+    //   console.log(newBusiness);
+
+      this.firebaseService.addBusiness(newBusiness);
+
+    //   this.changeState('default');
+  }
+
 }
