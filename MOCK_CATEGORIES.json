@@ -1,0 +1,14 @@
+[
+    {"id":1,
+     "name": "Retail"
+    },
+    {"id":2,
+     "name": "Software"
+    },
+    {"id":3,
+     "name": "Restaraunt"
+    },
+    {"id":4,
+     "name": "Marketing"
+    }
+]

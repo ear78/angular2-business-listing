@@ -7,7 +7,7 @@ import { Category } from '../category';
 @Injectable()
 export class FirebaseService {
     businesses: FirebaseListObservable<Business[]>;
-    // categories: FirebaseListObservable<Category[]>;
+    categories: FirebaseListObservable<Category[]>;
 
     constructor(private db: AngularFireDatabase){
 
@@ -28,13 +28,22 @@ export class FirebaseService {
 
     }
 
-    // getCategories(){
-    //     this.categories = this.db.list('/categories') as FirebaseListObservable<Category[]>
-    //     return this.categories;
-    // }
+    getCategories(){
+        console.log(this.categories)
+        this.categories = this.db.list('/categories') as FirebaseListObservable<Category[]>
+        return this.categories;
+    }
 
     addBusiness(newBusiness){
         return this.businesses.push(newBusiness);
+    }
+
+    updateBusiness(key, updBusiness){
+        return this.businesses.update(key, updBusiness);
+    }
+
+    deleteBusiness(key){
+        return this.businesses.remove(key);
     }
 
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { FirebaseService } from './services/firebase.service';
 import { Business } from './business';
+import { Category } from './category';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,15 @@ import { Business } from './business';
 export class AppComponent {
   title = 'app';
   businesses: Business[];
+  categories: Category[];
   appState: string;
   activeKey: string;
+
+  activeBusinessName:string;
+  activeAddress:string;
+  activeEmail: string;
+  activePhone: string;
+  activeCategory: string;
 
   // firebase varibales and connection
   constructor(private firebaseService: FirebaseService) {
@@ -22,6 +30,8 @@ export class AppComponent {
 
   ngOnInit(){
       this.firebaseService.getBusinesses().subscribe(businesses => {this.businesses = businesses});
+
+      this.firebaseService.getCategories().subscribe(categories => {this.categories = categories});
   }
 
   changeState(state, key){
@@ -34,7 +44,7 @@ export class AppComponent {
   }
 
   filterCategory(category){
-      this.firebaseService.getBusinesses(category)
+      this.firebaseService.getBusinesses(category).subscribe(businesses => {this.businesses = businesses});
   }
 
   addBusiness(event, business_name: string,
@@ -55,6 +65,31 @@ export class AppComponent {
       this.firebaseService.addBusiness(newBusiness);
 
     //   this.changeState('default');
+  }
+
+  showEdit(business){
+      this.changeState('edit', business.$key);
+      this.activeBusinessName = business.business_name;
+      this.activeAddress = business.address;
+      this.activeEmail = business.email;
+      this.activePhone = business.phone;
+      this.activeCategory = business.category;
+
+  }
+
+  updateBusiness(){
+      let updBusiness = {
+          business_name: this.activeBusinessName,
+          address: this.activeAddress,
+          email: this.activeEmail,
+          phone: this.activePhone,
+          category: this.activeCategory
+      }
+      this.firebaseService.updateBusiness(this.activeKey, updBusiness);
+  }
+
+  deleteBusiness(key){
+      this.firebaseService.deleteBusiness(key);
   }
 
 }
